@@ -20,6 +20,16 @@ app.get('/app', (req, res) => {
     res.type('text/plain')
 })
 
+// in Express, give parameters with :parameter
+// Can replace :number with something else
+app.get('/app/echo/:number', (req, res) => {
+    // The app is up and running!
+    res.status(200).json({
+        'message': req.params.number
+    })
+    res.type('text/plain')
+})
+
 // Endpoint does not exist; catch-all
 app.use(function(req, res) {
     // can also use .end -> plain text
