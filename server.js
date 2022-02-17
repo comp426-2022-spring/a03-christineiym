@@ -12,8 +12,17 @@ const server = app.listen(port, () => {
     console.log('App is running on port %PORT%'.replace('%PORT%', port))
 })
 
-// Default endpoint
+// Default endpoint (for /app)
+// It does not really care whether or not there are trailing slashes
+app.get('/app', (req, res) => {
+    // The app is up and running!
+    res.status(200).end('OK')
+    res.type('text/plain')
+})
+
+// Endpoint does not exist; catch-all
 app.use(function(req, res) {
+    // can also use .end -> plain text
     res.status(404).send("Endpoint does not exist")
     res.type("text/plain")
 })
