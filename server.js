@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
 
+const HEADS = 'heads'
+const TAILS = 'tails'
+
 var port = 3000
 
 // why const?
@@ -28,6 +31,18 @@ app.get('/app/echo/:number', (req, res) => {
         'message': req.params.number
     })
     res.type('text/plain')
+})
+
+function coinFlip() {
+    // Randomize the flip with randomize or math
+    return (Math.round(Math.random()) == 0) ? HEADS : TAILS
+}
+
+app.get('/app/flip', (req, res) => {
+    var flip = coinFlip()
+    res.status(200).json({
+        'flip': flip
+    })
 })
 
 // Endpoint does not exist; catch-all
