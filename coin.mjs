@@ -118,9 +118,3 @@ export function flipACoin(call) {
     throw 'Usage: node guess-flip --call=[heads|tails]'
   }
 }
-
-
-/** Export 
- * 
- * Export all of your named functions
-*/

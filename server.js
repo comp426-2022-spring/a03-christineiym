@@ -6,6 +6,8 @@ const ERROR = 1
 const HTTP_STATUS_OK = 200
 const HTTP_STATUS_NOT_FOUND = 404
 const CONTENT_TYPE_TEXT_PLAIN = 'text/plain'
+const HEADS = 'heads'
+const TAILS = 'tails'
 
 // Require Express.js
 const express = require('express')
@@ -24,7 +26,7 @@ const argPort = arguments['port']
 const port = argPort || process.env.PORT || DEFAULT_PORT
 
 // Import the coinFlips and countFlips functions from your coin.mjs file
-import { coinFlip, coinFlips, countFlips } from './coin.mjs'
+import { coinFlip, coinFlips, countFlips, flipMatch } from './coin.mjs'
 
 // Start an app server
 const server = app.listen(port, () => {
@@ -69,16 +71,18 @@ app.get('/app/flips/:number', (req, res) => {
 
 // Flip match against heads
 app.get('/app/flip/call/heads', (req, res) => {
-    var flip = coinFlip()
+    var flipMatch = flipACoin(HEADS)
+    
     res.status(HTTP_STATUS_OK).json({
-        'flip': flip
+        'result': flipMatch.result
     })
 })
 
 // Flip match against tails
 app.get('/app/flip/call/tails', (req, res) => {
-    var flip = coinFlip()
+    var flipMatch = flipACoin(TAILS)
+    
     res.status(HTTP_STATUS_OK).json({
-        'flip': flip
+        'result': flipMatch.result
     })
 })
