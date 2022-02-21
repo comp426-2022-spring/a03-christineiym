@@ -1,11 +1,26 @@
+//// Creating the server ////
+// Define named constants
+const START_ARG_NUM = 2
+const DEFAULT_PORT = 3000
+const ERROR = 1
+const HTTP_STATUS_OK = 200
+const HTTP_STATUS_NOT_FOUND = 404
+
 // Require Express.js
 const express = require('express')
 const app = express()
 
-const HEADS = 'heads'
-const TAILS = 'tails'
+// Require minimist module to process one argument `--port=` on the command line after `node server.js`.
+const minimist = require('minimist')
+const { exit } = require('process')
 
-var port = 3000
+// Define allowed argument name 'port'.
+const arguments = minimist(process.argv.slice(START_ARG_NUM))
+const argPort = arguments['port']
+
+// Define a const `port` using the argument from the command line. 
+// Make this const default to port 3000 if there is no argument given for `--port`.
+const port = argPort || process.env.PORT || DEFAULT_PORT
 
 // Import the coinFlips and countFlips functions from your coin.mjs file
 import { coinFlips, countFlips } from './coin.mjs'
@@ -15,11 +30,13 @@ const server = app.listen(port, () => {
     console.log('App listening on port %PORT%'.replace('%PORT%', port))
 })
 
+
+//// API endpoints ////
 // Default endpoint (for /app)
 // It does not really care whether or not there are trailing slashes
 app.get('/app', (req, res) => {
     // The app is up and running!
-    res.status(200).end('OK')
+    res.status(HTTP_STATUS_OK).end('OK')
     res.type('text/plain')
 })
 
@@ -27,7 +44,7 @@ app.get('/app', (req, res) => {
 // Can replace :number with something else
 app.get('/app/echo/:number', (req, res) => {
     // The app is up and running!
-    res.status(200).json({
+    res.status(HTTP_STATUS_OK).json({
         'message': req.params.number
     })
     res.type('text/plain')
@@ -40,7 +57,7 @@ function coinFlip() {
 
 app.get('/app/flip', (req, res) => {
     var flip = coinFlip()
-    res.status(200).json({
+    res.status(HTTP_STATUS_OK).json({
         'flip': flip
     })
 })
