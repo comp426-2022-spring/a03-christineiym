@@ -2,13 +2,16 @@
 // Define named constants
 const START_ARG_NUM = 2
 const DEFAULT_PORT = 3000
+const ERROR = 1
 const HTTP_STATUS_OK = 200
 const HTTP_STATUS_NOT_FOUND = 404
 const CONTENT_TYPE_TEXT_PLAIN = 'text/plain'
 const HEADS = 'heads'
 const TAILS = 'tails'
-const WIN = 'win'
-const LOSE = 'lose'
+
+// Create Require
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url)
 
 // Require Express.js
 const express = require('express')
@@ -26,131 +29,24 @@ const argPort = allArguments['port']
 // Make this const default to port 3000 if there is no argument given for `--port`.
 const port = argPort || process.env.PORT || DEFAULT_PORT
 
+// Import the coinFlips and countFlips functions from your coin.mjs file
+import { coinFlip, coinFlips, countFlips, flipACoin } from './coin.mjs'
+
 // Start an app server
 const server = app.listen(port, () => {
     console.log('App listening on port %PORT%'.replace('%PORT%', port))
 })
 
 
-//// Utility functions ////
-/** Simple coin flip
- * 
- * Write a function that accepts no parameters but returns either heads or tails at random.
- * 
- * @param {*}
- * @returns {string} 
- * 
- * example: coinFlip()
- * returns: heads | tails
- * 
- */
-function coinFlip() {
-    // Randomize the flip with randomize or math
-    return (Math.round(Math.random()) == 0) ? HEADS : TAILS
-}
-
-/** Multiple coin flips
- * 
- * Write a function that accepts one parameter (number of flips) and returns an array of 
- * resulting "heads" or "tails".
- * 
- * @param {number} flips 
- * @returns {string[]} results
- * 
- * example: coinFlips(10)
- * returns:
- *  [
-    'heads', 'heads',
-    'heads', 'tails',
-    'heads', 'tails',
-    'tails', 'heads',
-    'tails', 'heads'
-    ]
-*/
-function coinFlips(flips) {
-    var allFlips = [];
-
-    for (let i = 0; i < flips; i++) {
-        allFlips.push(coinFlip())
-    }
-
-    return allFlips
-}
-
-/** Count multiple flips
- * 
- * Write a function that accepts an array consisting of "heads" or "tails" 
- * (e.g. the results of your `coinFlips()` function) and counts each, returning 
- * an object containing the number of each.
- * 
- * example: conutFlips(['heads', 'heads','heads', 'tails','heads', 'tails','tails', 'heads','tails', 'heads'])
- * { tails: 5, heads: 5 }
- * 
- * @param {string[]} array 
- * @returns {{ heads: number, tails: number }}
- */
-function countFlips(array) {
-    var summary = {
-        heads: 0,
-        tails: 0
-    }
-    // TODO: account for undefined input?
-    array.forEach(flip => {
-        if (flip === HEADS) {
-            summary.heads++
-        } else if (flip === TAILS) {
-            summary.tails++
-        }
-    })
-
-    // Remove uneccessary properties.
-    if (summary.heads == 0) {
-        delete summary.heads
-    } else if (summary.tails == 0) {
-        delete summary.tails
-    }
-
-    return summary
-}
-
-/** Flip a coin!
- * 
- * Write a function that accepts one input parameter: a string either "heads" or "tails", flips a coin, and then records "win" or "lose". 
- * 
- * @param {string} call 
- * @returns {object} with keys that are the input param (heads or tails), a flip (heads or tails), and the result (win or lose). See below example.
- * 
- * example: flipACoin('tails')
- * returns: { call: 'tails', flip: 'heads', result: 'lose' }
- */
-function flipACoin(call) {
-    if (call === HEADS || call === TAILS) {
-        var resultsSummary = {
-            call: call,
-            flip: coinFlip(),
-            result: null
-        }
-
-        resultsSummary.result = ((resultsSummary.call === resultsSummary.flip) ? WIN : LOSE)
-        return resultsSummary
-    } else if (call === "" || call == null) {
-        throw 'Error: no input.'
-    } else {
-        throw 'Usage: node guess-flip --call=[heads|tails]'
-    }
-}
-
-
 //// API endpoints ////
-
 // Check endpoint
 app.get('/app/', (req, res) => {
     // Respond with status 200
     res.statusCode = 200
     // Respond with status message "OK"
     res.statusMessage = 'OK'
-    res.writeHead(res.statusCode, { 'Content-Type': CONTENT_TYPE_TEXT_PLAIN })
-    res.end(res.statusCode + ' ' + res.statusMessage)
+    res.writeHead( res.statusCode, { 'Content-Type' : CONTENT_TYPE_TEXT_PLAIN })
+    res.end(res.statusCode+ ' ' +res.statusMessage)
 });
 
 // One flip
@@ -175,7 +71,7 @@ app.get('/app/flips/:number', (req, res) => {
 // Flip match against heads
 app.get('/app/flip/call/heads', (req, res) => {
     var flipMatch = flipACoin(HEADS)
-
+    
     res.status(HTTP_STATUS_OK).json({
         'result': flipMatch.result
     })
@@ -184,7 +80,7 @@ app.get('/app/flip/call/heads', (req, res) => {
 // Flip match against tails
 app.get('/app/flip/call/tails', (req, res) => {
     var flipMatch = flipACoin(TAILS)
-
+    
     res.status(HTTP_STATUS_OK).json({
         'result': flipMatch.result
     })
