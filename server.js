@@ -2,7 +2,6 @@
 // Define named constants
 const START_ARG_NUM = 2
 const DEFAULT_PORT = 3000
-const ERROR = 1
 const HTTP_STATUS_OK = 200
 const HTTP_STATUS_NOT_FOUND = 404
 const CONTENT_TYPE_TEXT_PLAIN = 'text/plain'
@@ -63,27 +62,19 @@ app.get('/app/flips/:number', (req, res) => {
     var coinFlipsResultSummary = countFlips(coinFlipsResult)
 
     res.status(HTTP_STATUS_OK).json({
-        'raw random flips': coinFlipsResult,
+        'raw': coinFlipsResult,
         'summary': coinFlipsResultSummary
     })
 });
 
 // Flip match against heads
 app.get('/app/flip/call/heads', (req, res) => {
-    var flipMatch = flipACoin(HEADS)
-    
-    res.status(HTTP_STATUS_OK).json({
-        'result': flipMatch.result
-    })
+    res.status(HTTP_STATUS_OK).json(flipACoin(HEADS))
 })
 
 // Flip match against tails
 app.get('/app/flip/call/tails', (req, res) => {
-    var flipMatch = flipACoin(TAILS)
-    
-    res.status(HTTP_STATUS_OK).json({
-        'result': flipMatch.result
-    })
+    res.status(HTTP_STATUS_OK).json(flipACoin(TAILS))
 })
 
 // Default response for any request not addressed by the defined endpoints
