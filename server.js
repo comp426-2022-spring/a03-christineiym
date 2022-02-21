@@ -58,11 +58,13 @@ app.get('/app/flip', (req, res) => {
 
 // Multiple flips
 app.get('/app/flips/:number', (req, res) => {
-	const flips = manyflips(req.params.number)
+    var coinFlipsResult = coinFlips(req.params.number)
+    var coinFlipsResultSummary = countFlips(coinFlipsResult)
+
     res.status(HTTP_STATUS_OK).json({
-        'message': req.params.number
+        'raw random flips': coinFlipsResult,
+        'summary': coinFlipsResultSummary
     })
-    res.writeHead( res.statusCode, { 'Content-Type' : CONTENT_TYPE_TEXT_PLAIN })
 });
 
 // Flip match against heads
