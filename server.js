@@ -142,10 +142,6 @@ function flipACoin(call) {
 
 
 //// API endpoints ////
-// Default response for any request not addressed by the other endpoints below
-app.use(function (req, res) {
-    res.status(HTTP_STATUS_NOT_FOUND).send('404 NOT FOUND')
-})
 
 // Check endpoint
 app.get('/app/', (req, res) => {
@@ -192,4 +188,9 @@ app.get('/app/flip/call/tails', (req, res) => {
     res.status(HTTP_STATUS_OK).json({
         'result': flipMatch.result
     })
+})
+
+// Default response for any request not addressed by the defined endpoints
+app.use(function (req, res) {
+    res.status(HTTP_STATUS_NOT_FOUND).send('404 NOT FOUND')
 })
