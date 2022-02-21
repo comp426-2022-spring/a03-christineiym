@@ -22,8 +22,8 @@ const minimist = require('minimist')
 const { exit } = require('process')
 
 // Define allowed argument name 'port'.
-const arguments = minimist(process.argv.slice(START_ARG_NUM))
-const argPort = arguments['port']
+const allArguments = minimist(process.argv.slice(START_ARG_NUM))
+const argPort = allArguments['port']
 
 // Define a const `port` using the argument from the command line. 
 // Make this const default to port 3000 if there is no argument given for `--port`.
