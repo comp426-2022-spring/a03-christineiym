@@ -9,6 +9,10 @@ const CONTENT_TYPE_TEXT_PLAIN = 'text/plain'
 const HEADS = 'heads'
 const TAILS = 'tails'
 
+// Create Require
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url)
+
 // Require Express.js
 const express = require('express')
 const app = express()
