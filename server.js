@@ -30,7 +30,7 @@ const argPort = allArguments['port']
 const port = argPort || process.env.PORT || DEFAULT_PORT
 
 // Import the coinFlips and countFlips functions from your coin.mjs file
-import { coinFlip, coinFlips, countFlips, flipMatch } from './coin.mjs'
+import { coinFlip, coinFlips, countFlips, flipACoin } from './coin.mjs'
 
 // Start an app server
 const server = app.listen(port, () => {
